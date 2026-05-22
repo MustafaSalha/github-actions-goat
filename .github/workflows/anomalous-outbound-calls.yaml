@@ -1,16 +1,20 @@
 name: Anomalous Outbound Calls
+
 on:
   workflow_dispatch:
+
 jobs:
   unexpected-outbound-calls:
     name: AnomalousOutboundCalls
     runs-on: ubuntu-latest
-  steps:
-  - name: Harden Runner
-    uses: step-security/harden-runner@v2
-    with:
-      egress-policy: block          # blocks everything not in the list
-      allowed-endpoints: >
-        github.com:443
-        api.github.com:443
-        # pastebin.com is NOT listed = blocked automatically
+    steps:                          # ← must be indented under the job
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+
+      - name: Simulate outbound call
+        run: curl https://pastebin.com -L || true
